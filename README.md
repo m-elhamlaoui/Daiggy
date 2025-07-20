@@ -13,7 +13,7 @@ Escale Sport Admin Dashboard is a Django-based application designed to manage ca
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:m-elhamlaoui/EscaleSport.git
    ```
 
 2. Navigate to the project directory:
