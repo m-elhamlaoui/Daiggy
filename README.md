@@ -62,8 +62,8 @@ Escale Sport Admin Dashboard is a Django-based application designed to manage ca
 
 ## 🎥 Demo en Video  
 
-<p align="center">
-  <img src="./demo_vd.gif" alt="Démonstration en vidéo">
+<p align="center" >
+  <img src="./demo_vd.gif" alt="Démonstration en vidéo" width="800" height="450">
   <br>
   <br>
 </p>
