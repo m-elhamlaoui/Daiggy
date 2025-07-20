@@ -60,17 +60,21 @@ Escale Sport Admin Dashboard is a Django-based application designed to manage ca
 - `category`: Foreign key linking the product to a category.
 - `sale_end`: Property to calculate the end date of the sale.
 
-## Add Video Demo
+## 🎥 Demo en Video  
 
-To add a video demo, you can view the embedded video below:
+<p align="center">
+  <img src="./assets/App.gif" alt="Démonstration en vidéo">
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <img src="./assets/Web.gif" alt="Démonstration en vidéo">
+</p>
+## 🎥 Demo en Video  
 
-<video width="640" height="360" controls>
-  <source src="demo_vd.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
-
-=
+<p align="center">
+  <img src="./demo_vd.gif" alt="Démonstration en vidéo">
+  <br>
+  <br>
+</p>
