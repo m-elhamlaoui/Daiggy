@@ -62,11 +62,12 @@ Escale Sport Admin Dashboard is a Django-based application designed to manage ca
 
 ## Add Video Demo
 
-To add a video demo, upload your video to a platform like YouTube or Vimeo and embed the link below:
+To add a video demo, you can view the embedded video below:
 
-[![Watch the demo](https://img.youtube.com/vi/<video-id>/0.jpg)](https://www.youtube.com/watch?v=<video-id>)
-
-Replace `<video-id>` with your video ID.
+<video width="640" height="360" controls>
+  <source src="demo_vd.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ## Contributing
 
