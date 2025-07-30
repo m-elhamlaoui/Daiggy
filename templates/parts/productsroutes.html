@@ -1,0 +1,207 @@
+{% load static %}
+<script>
+  window.isAuthenticated = {{ is_authenticated|yesno:"true,false" }};
+
+  window.FAVORITE_URL = "{% url 'users:add_to_favorite' %}";
+  window.CSRF_TOKEN = "{{ csrf_token }}";
+</script>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            customBlue: '#2B82C3',
+          }
+        }
+      }
+    }
+</script>
+<style>
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none;    /* Firefox */
+  }
+
+</style>
+
+
+{% comment %} {% if solds %}
+  {% with first=solds.0 %}
+    <div class="mt-2 w-[70%] ml-auto mr-auto lex justify-center items-center bg-customBlue  py-3 text-center text-2xl font-bold rounded-xl">
+      <div class="flex justify-around text-xs font-bold border-radius-49 text-white countdown" data-sale-end="{{ first.sale_end_iso }}">
+          <div><span id="day" class="days lg:text-3xl md:text-4xl sm:text-4xl">05</span><br><span id="days" class="lg:text-2xl md:text-3xl sm:text-3xl text:3xl">Days</span></div>
+            <div><span id="hour" class="hours lg:text-3xl md:text-4xl sm:text-4xl">12</span><br><span id="hours" class="lg:text-2xl md:text-3xl sm:text-3xl text:3xl">Hours</span></div>
+            <div><span id="minute" class="minutes lg:text-3xl md:text-4xl sm:text-4xl">30</span><br><span id="minutes" class="lg:text-2xl md:text-3xl sm:text-3xl text:3xl">Mins</span></div>
+            <div><span id="second" class="seconds lg:text-3xl md:text-4xl sm:text-4xl">25</span><br><span id="seconds" class="lg:text-2xl md:text-3xl sm:text-3xl text:3xl">Sec</span></div>
+      </div>
+    </div>
+  {% endwith %}
+{% endif %} {% endcomment %}
+
+
+<section class="small-products-section text-center mb-10">
+  <div class="overflow-x-auto scrollbar-hide w-full">
+    <div class="flex gap-4 px-4 py-2 w-max mx-auto">
+      {% for category in categorys %}
+        <a href="{% url 'products' %}?category={{category.nameFr}}" class="flex-shrink-0 flex flex-col items-center text-white no-underline">
+            <div class="w-[170px] h-[170px] sm:[170px] sm:h-[170px] md:w-[170px] md:h-[170px] lg:h-28 lg:w-28 rounded-full shadow-md flex items-center justify-center overflow-hidden bg-[#131a26]">
+              <img src="{{ category.image.url }}" alt="{{category.nameFr}}" class="w-[170px] h-[170px] sm:w-[170px] sm:h-[170px] md:w-[170px] md:h-[170px] lg:h-28 lg:w-28 object-cover rounded-full" />
+            </div>
+          <h5 id='fr' class="block  text-4xl lg:text-2xl mt-1">{{category.nameFr}}</h5>
+          <h5 id='ar' class="hidden text-2xl">{{category.nameAr}}</h5>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+
+{% comment %} Products with sold {% endcomment %}
+
+<section class="products  text-white py-0 px-3" >
+    <h2 class="px-1 text-white flex justify-content-between w-full mb-3"><span id="Les_Produit_en_sold" class="w-1/2 ml-0 text-left text-4xl sm:text-2xl md:text-4xl  lg:text-2xl  font-bold">Les produit en sold</span> <a class="w-1/9 mr-30 text-right text-white text-4xl lg:text-2xl md:text-4xl sm:text-2xl font-bold no-underline cursor-pointer" id="plus">Plus</a></h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10 px-1 md:px-10 mt-1">
+        {% for sold in solds %}
+        <div class="relative bg-dark rounded-xl shadow-md overflow-hidden group">
+              <!-- Offer badge -->
+               {% if sold.sold != 0 %}
+                <div class="absolute top-3 left-1 bg-customBlue text-white lg:text-xl text-2xl px-2.5 py-1 rounded-full font-semibold  z-10">
+                  {{sold.sold}}%
+                </div>
+               {% endif %}
+
+              <!-- Right icons -->
+              <div class="absolute top-3 right-0 z-10 flex flex-col gap-2 items-center">
+                  <button data-product-id="{{sold.id}}" class="favorite-btn  bg-none p-2 rounded-full  hover:text-red-500 transition">
+                      <i class="fa-regular fa-heart lg:text-3xl text-4xl {% if sold.id in favorite_ids %}text-red-500{% else %}text-customBlue{% endif %}"></i>
+                  </button>
+                  <button class="bg-noen p-2 rounded-full   hover:text-green-500 transition">
+                    <a class="nav-link active" href="{% url 'product' %}?id={{sold.id}}">
+                      <i class="fas fa-shopping-cart text-customBlue lg:text-3xl text-4xl"></i>
+                    </a>
+                  </button>
+                  <button data-product-id="{{sold.id}}" class="bg-none p-2 rounded-full  hover:text-blue-500 transition">
+                      <a class="nav-link active" href="{% url 'product' %}?id={{sold.id}}">
+                        <i class="fa-solid fa-circle-plus text-customBlue lg:text-3xl text-4xl"></i>
+                      </a>
+                  </button>
+              </div>
+
+              {% comment %} place off alert message {% endcomment %}
+              <p id="alert-msg-{{ sold.id }}" class="hidden p-2 bg-gray-200 text-customBlue  text-4xl lg:text-2xl absolute w-1/2 top-5  right-10 rounded-xl  justify-center break-words "></p>
+
+              <!-- Image -->
+              <div class="w-full aspect-[4/3] overflow-hidden rounded-lg">
+                <img
+                  src="{{ sold.image1.url }}"
+                  alt="Product"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <!-- Price -->
+              <div class="px-4 py-1 text-center">
+                  {% comment %} <h3 class="text-md font-semibold text-white">Price: {{sold.price}}</h3> {% endcomment %}
+                  <h3 class="text-4xl lg:text-3xl font-semi-bold text-white ">
+                    <span id="price" >Price</span>: {{ sold.price }}
+                  </h3>
+              </div>
+
+              {% comment %} <!-- Countdown -->
+              {% if sold.sold != 0 %}
+                  <div class="bg-customBlue text-white text-center py-2 flex justify-around text-xs font-bold countdown" data-sale-end="{{ sold.sale_end_iso }}">
+                    <div><span id="day"  class="days text-2xl">00</span><br><span id="days" class="text-2xl sm:text-2xl md:text-xl lg:text-xl">Days</span></div>
+                    <div><span id="hour" class="hours text-2xl">00</span><br><span id="hours" class="text-xl sm:text-2xl md:text-xl lg:text-xl">Hours</span></div>
+                    <div><span id="minute" class="minutes text-2xl">00</span><br><span id="minutes" class="text-2xl sm:text-2xl md:text-xl lg:text-xl">Mins</span></div>
+                    <div><span id="second" class="seconds text-2xl">00</span><br><span id="seconds" class="text-2xl sm:text-2xl md:text-xl lg:text-xl">Sec</span></div>
+                  </div>
+              {% endif %} {% endcomment %}
+
+       </div>
+      {% endfor %}
+    </div>
+
+  </section>
+
+
+
+
+  {% for category, products in categories_with_products %}
+  <section class="products text-white py-4 px-3">
+      <h2 class="px-1 text-white flex justify-content-between w-full text-4xl lg:text-2xl md:text-4xl sm:text-2xl  font-bold mb-3">
+          <span id='fr' class="w-1/2 ml-0 text-left lg:text-2xl md:text-4xl sm:text-2xl font-bold">{{ category.nameFr }}</span>
+          <span id='ar' class="w-1/2 ml-0 text-left lg:text-2xl md:text-4xl sm:text-2xl font-bold hidden">{{ category.nameAr }}</span>
+          <a href="{% url 'products' %}?category={{ category.nameFr }}" class="w-1/9 mr-30 text-right text-white  no-underline cursor-pointer text-4xl lg:text-2xl md:text-4xl sm:text-2xl font-bold" id="plus">Plus</a>
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10 px-1 md:px-10">
+          {% for product in products %}
+          <div class="relative bg-dark rounded-xl shadow-md overflow-hidden group">
+              <!-- Right icons -->
+              <div class="absolute top-3 right-0 z-10 flex flex-col gap-2 items-center">
+                  <button data-product-id="{{product.id}}" class="favorite-btn  bg-none p-2 rounded-full hover:text-red-500 transition">
+                     <i class="fa-regular fa-heart text-4xl lg:text-3xl {% if product.id in favorite_ids %}text-red-500{% else %}text-customBlue{% endif %}"></i>
+                  </button>
+                  <button data-product-id="{{product.id}}" class="bg-noen p-2 rounded-full hover:text-green-500 transition text-xl">
+                    <a class="nav-link active text-xl" href="{% url 'product' %}?id={{ product.id }}">
+                      <i class="fas fa-shopping-cart text-4xl lg:text-3xl text-customBlue "></i>
+                    </a>
+                  </button>
+                  <button class="bg-none p-2 rounded-full hover:text-blue-500 transition text-xl">
+                      <a class="nav-link active text-xl" href="{% url 'product' %}?id={{ product.id }}">
+                          <i class="fa-solid fa-circle-plus text-customBlue text-4xl lg:text-3xl"></i>
+                      </a>
+                  </button>
+              </div>
+
+              {% comment %} place off alert message {% endcomment %}
+              <p id="alert-msg-{{ product.id }}" class="hidden p-2 bg-gray-200 text-customBlue  text-4xl lg:text-2xl absolute w-1/2 top-5  right-10 rounded-xl  justify-center break-words "></p>
+
+              <!-- Image -->
+              <div class="w-full aspect-[4/3] overflow-hidden rounded-lg">
+                <img
+                  src="{{ product.image1.url }}"
+                  alt="Product"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <!-- Price -->
+              <div class="px-4 py-1 text-center">
+                  <h3 class="text-4xl lg:text-3xl font-semi-bold text-white">
+                    <span id="price">Price</span>: {{ product.price }}
+                  </h3>
+              </div>
+
+              {% comment %} {% if product.sold != 0 %}
+              <div class="absolute top-3 left-1 bg-customBlue text-white lg:text-xl text-2xl px-2.5 py-1 rounded-full font-semibold z-10">
+                  50%
+              </div>
+              {% endif %} {% endcomment %}
+
+              <!-- Countdown -->
+              {% comment %} {% if product.sold != 0 %}
+                  <div class="bg-customBlue text-white text-center py-2 flex justify-around text-xs font-bold countdown" data-sale-end="{{ product.sale_end_iso }}">
+                    <div><span id="day"  class="days text-2xl">05</span><br><span id="days" class="text-2xl sm:text-2xl md:text-xl lg:text-xl">Days</span></div>
+                    <div><span id="hour" class="hours text-2xl">12</span><br><span id="hours" class="text-2xl sm:text-2xl md:text-xl lg:text-xl">Hours</span></div>
+                    <div><span id="minute" class="minutes text-2xl">30</span><br><span id="minutes" class="text-2xl sm:text-2xl md:text-xl lg:text-xl">Mins</span></div>
+                    <div><span id="second" class="seconds text-2xl">25</span><br><span id="seconds" class="text-2xl sm:text-2xl md:text-xl lg:text-xl">Sec</span></div>
+                  </div>
+              {% endif %} {% endcomment %}
+          </div>
+          {% endfor %}
+      </div>
+  </section>
+  {% endfor %}
+
+
+  <script src="{% static 'js/translation.js' %}"> </script>
+  <script src="{% static 'js/sold.js' %}"> </script>
+  <script src="{% static 'js/authentificated.js' %}"></script>

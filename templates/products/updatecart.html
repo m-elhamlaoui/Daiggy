@@ -1,0 +1,143 @@
+{% load static %}
+{% comment %} {% include "parts/navbar.html" %} {% endcomment %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% comment %} font awesom {% endcomment %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Detail</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            customBlue: '#2B82C3',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-dark text-white">
+
+  <!-- Detaille Top Header -->
+  <div class="mt-2 w-1/2 ml-auto mr-auto lex justify-center items-center bg-customBlue text-white py-3 text-center text-2xl font-semibold rounded-xl">
+    <div class="flex justify-around text-xs font-bold border-radius-49 text-white">
+      <div><span id="day" class="lg:text-3xl">05</span><br><span id="days">Days</span></div>
+      <div><span id="hour" class="lg:text-3xl">12</span><br><span id="hours">Hours</span></div>
+      <div><span id="minute" class="lg:text-3xl">30</span><br><span id="minutes">Mins</span></div>
+      <div><span id="second" class="lg:text-3xl">25</span><br><span id="seconds">Sec</span></div>
+    </div>
+  </div>
+
+<div class="max-w-7xl mx-auto px-6 py-1 grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+    <!-- Left: Main Image + Thumbnails -->
+    <div>
+      <div class="relative w-full max-w-md mx-auto mb-4 mt-1">
+        <img id="mainImage" src="{{product.image1}}" alt="Main Product" class="w-full aspect-square object-cover rounded-xl shadow"/>
+        <!-- Zoom / Fullscreen Icons -->
+        <div class="absolute top-2 left-2 flex flex-col gap-2 z-10">
+          <button class="bg-dark p-2 rounded-full shadow text-gray-800">
+            <i class="fas fa-search-plus"></i>
+          </button>
+          <button class="bg-dark p-2 rounded-full shadow text-gray-800">
+            <i class="fas fa-expand"></i>
+          </button>
+        </div>
+        <!-- Add to Cart in Top Right -->
+        <div class="absolute top-4 right-4">
+          <form method="POST" action="{% url 'users:update_product' product.id %}" id="cartForm">
+            {% csrf_token %}
+            <input type="hidden" name="image1" value="{{ product.image1 }}">
+            <input type="hidden" name="image2" value="{{ product.image2 }}">
+            <input type="hidden" name="image3" value="{{ product.image3 }}">
+            <input type="hidden" name="image4" value="{{ product.image4 }}">
+            <input type="hidden" name="price" value="{{ product.price }}">
+            <input type="hidden" name="size" id="selectedSize" value="{{product.size}}">
+            <input type="hidden" name="quantity" id="quantityInput" value="{{product.quantity}}">
+            <input type="hidden" name="email" value="{{ user_email }}">
+
+            <button id="addToCartBtn" type="submit" class="bg-none text-white px-4 py-2 rounded-full transition text-sm font-semibold">
+              <i class="fa-solid fa-rotate-right cursor-pointer text-2xl text-customBlue"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="flex gap-4 justify-center">
+        <img src="{{product.image1}}" class="thumbnail w-20 h-16 rounded border-2 border-transparent cursor-pointer hover:border-gray-300 focus:border-gray-300" />
+        <img src="{{product.image2}}" class="thumbnail w-20 h-16 rounded border-2 border-transparent cursor-pointer hover:border-gray-300 focus:border-gray-300" />
+        <img src="{% static 'images/Logo.jpeg' %}" class="thumbnail w-20 h-16 rounded border-2 border-transparent cursor-pointer hover:border-gray-300 focus:border-gray-300" />
+        <img src="{{product.image4}}" class="thumbnail w-20 h-16 rounded border-2 border-transparent cursor-pointer hover:border-gray-300 focus:border-gray-300" />
+      </div>
+    </div>
+    <!-- Right: Product Info -->
+    <div class="flex flex-col justify-center">
+      <h1 class="text-3xl font-bold mb-2" id="offred">Sizes <span class="text-gray-300">offred</span></h1>
+
+      <div class="flex items-center gap-2 text-sm text-gray-300 mb-6">
+        <span class="text-xl" id="sizes">Select Size:</span>
+        <div class="flex gap-2">
+          <button class="px-3 py-1 border rounded hover:bg-gray-200 text-gray-800 bg-gray-300">{{product.size}}</button>
+          <button class="px-3 py-1 border  rounded bg-gray-200 text-gray-800 hover:bg-gray-300 focus:bg-gray-300">38</button>
+          <button class="px-3 py-1 border  rounded bg-gray-200 text-gray-800 hover:bg-gray-300 focus:bg-gray-300">39</button>
+          <button class="px-3 py-1 border  rounded bg-gray-200 text-gray-800 hover:bg-gray-300 focus:bg-gray-300">40</button>
+        </div>
+      </div>
+
+      <!-- Quantity Selector -->
+      <div class="mb-1 flex items-center gap-4">
+        <label for="quantity" class="text-xl font-medium text-gray-300" id="quant" >Quantity:</label>
+        <div class="flex items-center border rounded-md overflow-hidden  bg-gray-200">
+          <button onclick="changeQuantity(-1)" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-800">-</button>
+          <input id="quantity" type="number" value="{{product.quantity}}" min="1" class="w-12 text-center outline-none border-l border-r text-gray-800 bg-gray-200" />
+          <button onclick="changeQuantity(1)" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-800">+</button>
+        </div>
+      </div>
+      <div>
+        <p class="font-medium text-xl" id='price2'>Price</p>
+        <p class="mb-1">{{product.price}}</p>
+      </div>
+      <!-- Back to Home replaces Add to Cart -->
+      <div class="flex items-center justify-between mb-6">
+        <a href="{% url 'index' %}" class="back-btn px-6 py-3 rounded-xl bg-gray-200 text-gray-800 hover:bg-gray-300 transition text-sm font-semibold" id="back">
+          ← Back to Home
+        </a>
+      </div>
+
+      <div class="grid grid-cols-2 text-sm text-gray-600 gap-4">
+        <div>
+          <p class="font-semibold">Description</p>
+          <p>Free Shipping & Returns</p>
+        </div>
+        <div>
+          <p class="font-semibold text-xl" id='price2'>Price</p>
+          <p>{{product.price}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Size Alert Modal -->
+<div id="sizeAlertModal" class="absolute inset-0  bg-opacity-30 flex items-center justify-center z-50 hidden px-4">
+  <div class="bg-white w-full max-w-sm p-6 rounded-xl text-center shadow-xl">
+    <h2 class="text-lg sm:text-xl font-semibold mb-2 text-red-600">Size Required</h2>
+    <p class="text-sm sm:text-base text-gray-700 mb-4">Please select a size before adding to the cart.</p>
+    <button id="modalOkBtn" class="bg-customBlue text-white px-5 py-2 rounded hover:bg-blue-700 transition text-sm sm:text-base">OK</button>
+  </div>
+</div>
+
+
+  <script src="{% static 'js/product.js' %}"></script>
+  <script src="{% static 'js/translation2.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion des Produits</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <div class="min-h-screen p-6">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row items-center sm:items-center justify-between mb-6 gap-4">
+      <h1 class="text-3xl font-bold text-gray-800 text-center">Modification des Produits</h1>
+    </div>
+
+    <!-- Filtres -->
+    <div class="bg-white p-4 rounded-2xl shadow mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <select class="w-full border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option>Tous les types</option>
+          <option>Électronique</option>
+          <option>Vêtements</option>
+          <option>Accessoires</option>
+        </select>
+
+        <input type="date" class="w-full border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <input type="date" class="w-full border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <div class="mt-4 text-right">
+        <button class="bg-indigo-600 text-white px-6 py-2 rounded-xl hover:bg-indigo-700 transition">Filtrer</button>
+      </div>
+    </div>
+
+    <!-- Tableau des produits -->
+    <div class="bg-white rounded-2xl shadow overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead class="bg-gray-200 text-gray-700">
+          <tr>
+            <th class="px-6 py-3 text-left whitespace-nowrap">Image</th>
+            <th class="px-6 py-3 text-left whitespace-nowrap">Nom</th>
+            <th class="px-6 py-3 text-left whitespace-nowrap">Type</th>
+            <th class="px-6 py-3 text-left whitespace-nowrap">Date d'ajout</th>
+            <th class="px-6 py-3 text-left whitespace-nowrap">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr class="hover:bg-gray-50 transition">
+            <td class="px-6 py-4">
+              <img src="https://via.placeholder.com/40" class="rounded" alt="Produit">
+            </td>
+            <td class="px-6 py-4 font-medium">Casque Bluetooth</td>
+            <td class="px-6 py-4">Électronique</td>
+            <td class="px-6 py-4">2025-03-28</td>
+            <td class="px-6 py-4 space-x-2">
+              <button class="text-blue-600 hover:underline">Modifier</button>
+              <button class="text-red-600 hover:underline">Supprimer</button>
+            </td>
+          </tr>
+          <!-- Répéter les lignes pour chaque produit -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-6 flex justify-end">
+      <nav class="inline-flex rounded-xl shadow-sm overflow-hidden divide-x divide-gray-300 border border-gray-300">
+        <a href="#" class="px-4 py-2 bg-white hover:bg-gray-100 transition">Précédent</a>
+        <a href="#" class="px-4 py-2 bg-white hover:bg-gray-100 transition">1</a>
+        <a href="#" class="px-4 py-2 bg-white hover:bg-gray-100 transition">2</a>
+        <a href="#" class="px-4 py-2 bg-white hover:bg-gray-100 transition">Suivant</a>
+      </nav>
+    </div>
+  </div>
+</body>
+</html>
+
+  <!-- Tailwind CDN -->
+{% comment %} <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<div class="max-w-xs relative bg-white rounded-xl shadow-md overflow-hidden group">
+  <!-- Offer badge -->
+  <div class="absolute top-3 left-3 bg-green-600 text-white text-xs px-3 py-1 rounded-full font-semibold z-10">
+    50% off
+  </div>
+
+  <!-- Right side stacked icons -->
+  <div class="absolute top-3 right-3 z-10 flex flex-col gap-2 items-center">
+    <button class="bg-white p-2 rounded-full shadow hover:text-red-500 transition">
+      <i class="fas fa-heart text-gray-600">h</i>
+    </button>
+    <button class="bg-white p-2 rounded-full shadow hover:text-green-500 transition">
+      <i class="fas fa-shopping-cart text-gray-600">h</i>
+    </button>
+    <button class="bg-white p-2 rounded-full shadow hover:text-blue-500 transition">
+      <i class="fas fa-ellipsis-h text-gray-600">h</i>
+    </button>
+  </div>
+
+  <!-- Product image -->
+  <img src="{% static 'images/Logo.jpeg' %}" alt="Product" class="w-full h-52 object-cover rounded-t-xl" />
+
+  <!-- Product info -->
+  <div class="p-4 text-center">
+    <h3 class="text-md font-semibold text-gray-700">Fauteuil moderne</h3>
+  </div>
+
+  <!-- Countdown timer -->
+  <div class="bg-yellow-400 text-white text-center py-2 flex justify-around text-xs font-bold">
+    <div><span id="days">05</span><br>Days</div>
+    <div><span id="hours">12</span><br>Hours</div>
+    <div><span id="minutes">30</span><br>Mins</div>
+    <div><span id="seconds">25</span><br>Sec</div>
+  </div>
+</div>
+
+<!-- Timer Script -->
+<script>
+  function startCountdown(duration) {
+    let timer = duration, days, hours, minutes, seconds;
+    setInterval(() => {
+      days = Math.floor(timer / (24 * 60 * 60));
+      hours = Math.floor((timer % (24 * 60 * 60)) / 3600);
+      minutes = Math.floor((timer % 3600) / 60);
+      seconds = timer % 60;
+
+      document.getElementById('days').textContent = String(days).padStart(2, '0');
+      document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+      document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+
+      if (--timer < 0) timer = 0;
+    }, 1000);
+  }
+
+  // Start countdown with 5 days
+  startCountdown(5 * 24 * 60 * 60);
+</script> {% endcomment %}
+<!-- Container -->
+{% load static %}
+{% include "parts/navbar.html" %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
+  <!-- Product Card -->
+  <div class="relative bg-white rounded-xl shadow-md overflow-hidden group">
+    <!-- Offer badge -->
+    <div class="absolute top-3 left-3 bg-green-600 text-white text-xs px-3 py-1 rounded-full font-semibold z-10">
+      50% off
+    </div>
+
+    <!-- Right icons -->
+    <div class="absolute top-3 right-0 z-10 flex flex-col gap-2 items-center">
+      <button class="bg-none p-2 rounded-full  hover:text-red-500 transition">
+        <i class="fas fa-heart text-gray-600"></i>
+      </button>
+      <button class="bg-noen p-2 rounded-full  hover:text-green-500 transition">
+        <i class="fas fa-shopping-cart text-gray-600"></i>
+      </button>
+      <button class="bg-none p-2 rounded-full  hover:text-blue-500 transition">
+        <i class="fas fa-ellipsis-h text-gray-600"></i>
+      </button>
+    </div>
+
+    <!-- Image -->
+    <img src="{% static 'images/Logo.jpeg' %}" alt="Product" class="w-full h-52 object-cover rounded-t-xl" />
+
+    <!-- Title -->
+    <div class="p-4 text-center">
+      <h3 class="text-md font-semibold text-gray-700">Fauteuil moderne</h3>
+    </div>
+
+    <!-- Countdown -->
+    <div class="bg-yellow-400 text-white text-center py-2 flex justify-around text-xs font-bold">
+      <div><span id="days">05</span><br>Days</div>
+      <div><span id="hours">12</span><br>Hours</div>
+      <div><span id="minutes">30</span><br>Mins</div>
+      <div><span id="seconds">25</span><br>Sec</div>
+    </div>
+  </div>
+
+  <!-- Duplicate the product card as needed -->
+</div>
