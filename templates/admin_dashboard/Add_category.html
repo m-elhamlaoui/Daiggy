@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ajouter un Produit</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            customBlue: '#2B82C3',
+            dark: '#1e293b',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen">
+
+  <!-- Flex layout with sidebar + content -->
+  <div class="flex flex-col md:flex-row min-h-screen">
+
+    <!-- 📦 Sidebar -->
+    {% include "admin_dashboard/sidebar.html" %}
+
+    <!-- Mobile menu toggle (top-left) -->
+    <div class="md:hidden fixed top-4 left-4 z-50   -4">
+      <button id="toggleSidebar" class="bg-customBlue text-white p-2 rounded-full shadow-lg">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+
+
+    <!-- 📄 Main Content -->
+    <main class="flex-1 p-6 overflow-auto mt-1 sm:mt-1">
+      
+      <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-3xl overflow-hidden">
+
+        <!-- Header -->
+        <div class="bg-[#2B82C3] text-white px-8 py-6 rounded-t-3xl">
+          <h2 id="typed-title" class="text-2xl font-semibold text-center">A</h2>
+        </div>
+
+        <!-- Form -->
+        <form action="{% url 'AddCategory' %}" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
+          {% csrf_token %}
+          <!-- Images -->
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Images du produit</label>
+            <div class="flex flex-wrap gap-4" id="multi-preview-container">
+              <div class="relative w-20 h-20 border-2 border-dashed border-[#2B82C3] rounded-xl bg-gray-50 overflow-hidden flex items-center justify-center text-gray-400 text-sm cursor-pointer group">
+                <span class="text-center group-hover:text-[#2B82C3]">Image{{ forloop.counter }}</span>
+                <input type="file" name="image" Required accept="image/*"
+                  class="absolute inset-0 opacity-0 cursor-pointer preview-uploader">
+              </div>
+            </div>
+          </div>
+
+          <!-- Nom fr -->
+          <div>
+            <label for="quantity" class="block text-gray-700 font-medium mb-2">Nom category FR:</label>
+            <input type="text" id="quantity" name="namefr" Required  placeholder="Nom de categorie"
+              class="w-full border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B82C3]">
+          </div>
+
+          <!-- Nom AR -->
+          <div>
+            <label dir='rtl' for="quantity" class="block text-gray-700 font-medium mb-2">الاسم بالعربية:</label>
+            <input dir='rtl' type="text" id="quantity" name="namear" Required  placeholder="اسم الصنف"
+              class="w-full border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B82C3]">
+          </div>
+
+          <!-- Submit -->
+          <div class="text-center">
+            <button type="submit"
+              class="bg-[#256baa] text-white px-6 py-3 text-xl rounded-xl font-semibold hover:bg-[#256baa] transition duration-300">
+              <i class="fa-solid fa-circle-check hover:text-black"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="{% static 'js/addcategory.js' %}"></script>
+</body>
+</html>

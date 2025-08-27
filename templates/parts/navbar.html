@@ -1,0 +1,115 @@
+{% load static %}
+<style>
+  [dir="rtl"] body {
+    text-align: right;
+}
+
+[dir="rtl"] .text-left {
+    text-align: right;
+}
+
+[dir="rtl"] .text-right {
+    text-align: left;
+}
+</style>
+
+{% load static %}
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            customBlue: '#2B82C3',
+          }
+        }
+      }
+    }
+</script>
+<nav class="bg-[#131a26] shadow-lg sticky top-0 z-50 w-full rounded-b-2xl p-2 mt-0 mb-3" dir='ltr'>
+  <div class="flex items-center justify-between px-4 py-3">
+    <div class="flex-shrink-0">
+      <a href="{% url 'index' %}"><img src="{% static 'images/logo2.png' %}" alt="شعار المؤسسة"
+           class="h-46 md:h-24 w-auto object-contain transition-all duration-200" style="max-width:240px;">
+      </a>
+    </div>
+
+    <div class="hidden lg:flex items-center gap-4">
+      <div id="test" class="relative group">
+        <button id="langBtn" class="px-3 py-2 rounded-xl bg-gray-800  hover:bg-gray-700 flex items-center gap-2 focus:outline-none text-white">
+          <span id="currentLangLabel">Français</span>
+        </button>
+        <div id="langMenu" class="absolute left-0 mt-2 w-32 bg-white text-gray-900 rounded-lg shadow-lg hidden z-50">
+          <button onclick="changeLanguage('Français')" class="block px-4 py-2 hover:bg-gray-200/50 w-full text-left hover:rounded-xl">Français</button>
+          <button onclick="changeLanguage('Français')" class="block px-4 py-2 hover:bg-gray-200/50 w-full text-left hover:rounded-xl">العربية</button>
+        </div>
+      </div>
+
+      <button id="themeToggle" class="px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center gap-1 focus:outline-none" aria-label="Dark/Light mode">
+        <i class="fa-solid fa-moon text-xl hidden text-white" id="moonIcon"></i>
+      </button>
+      <a href="{% url 'login' %}" class="px-4 py-2 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold flex items-center gap-2">
+        <i class="fa-solid fa-user"></i>
+        <span>تسجيل الدخول</span>
+      </a>
+      <a href="{% url 'users:cart' %}"   class="relative">
+        <i class="fa-solid fa-shopping-cart text-2xl text-white"></i>
+        <span id="cartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+      </a>
+    </div>
+
+    <div class="flex  lg:hidden  items-center gap-10">
+      <div id="test-mobile" class="relative group lg:hidden">
+        <button id="langBtnMobile" class="px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center gap-2 focus:outline-none text-white w-full ">
+          <span id="currentLangLabelMobile" class="text-4xl">Français</span>
+        </button>
+        <div id="langMenuMobile" class="absolute left-0 mt-2 w-auto bg-white text-gray-900 rounded-lg shadow-lg hidden z-50 p-2 pb-3">
+          <button onclick="changeLanguage('Français')" class="block px-4 py-2 hover:bg-gray-200/50 w-full text-left hover:rounded-xl text-4xl">Français</button>
+          <button onclick="changeLanguage('العربية')" class="block px-4 py-2 hover:bg-gray-200/50 w-full text-left hover:rounded-xl text-4xl">العربية</button>
+        </div>
+      </div>
+      <a href="{% url 'login' %}" class="px-3 py-2 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold flex items-center gap-1">
+        <i class="fa-solid fa-user text-4xl"></i>
+      </a>
+      <button id="sidebarOpenBtn" class="p-3 rounded-lg hover:bg-gray-700">
+        <i class="fa-solid fa-bars text-white text-4xl"></i>
+      </button>
+    </div>
+  </div>
+
+  <div id="sidebar" class="fixed top-0 right-0 h-full w-[600px] max-w-full bg-[#141a28] text-white shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 pt-1 pb-2">
+    <div class="flex flex-col gap-6 p-6 pt-8 relative h-full">
+      <img src="{% static 'images/logo2.png' %}" alt="شعار المؤسسة" class="h-20 w-auto mx-auto mb-4 object-contain" style="max-width:220px;">
+
+      {% comment %} <button id="themeToggleSidebar" class="block w-full px-4 py-2 rounded bg-gray-800 mb-2 text-left">تبديل الوضع</button> {% endcomment %}
+
+        <a href="{% url 'users:cart' %}" class="relative" >
+          <i class="fa-solid fa-shopping-cart text-2xl text-white"></i>
+          <span id="cartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+        </a>
+      <a href="{% url 'login' %}" class="block w-full px-4 py-2 rounded bg-blue-700 mb-2 text-center">تسجيل الدخول</a>
+      <button id="sidebarCloseBtn" class="absolute top-2 left-2 text-2xl bg-gray-700 rounded-full p-1 hover:bg-customBlue w-14 h-14 transition">×</button>
+
+
+
+
+      <section class="small-products-section text-center mb-10  mt-2 bg-gray-900 p-0">
+        <div class="overflow-x-auto scrollbar-hide w-full  rounded-xl m-auto">
+          <div class="flex  gap-4 px-4 py-1 w-max mx-auto">
+            {% for category in categorys %}
+              <a href="{% url 'products' %}?category={{category.nameFr}}" class="flex-shrink-0 flex flex-col items-center text-white no-underline">
+                  <div class="w-28 h-28 sm:28 sm:h-28 md:w-28 md:h-28 rounded-full shadow-md flex items-center justify-center overflow-hidden bg-[#131a26]">
+                    <img src="{{ category.image.url }}" alt="{{category.nameFr}}" class="w-28 h-28 sm:w-28 sm:h-28 md:w-28 md:h-28  object-cover rounded-full" />
+                  </div>
+                <h5 id='fr' class="block  text-2xl  mt-1">{{category.nameFr}}</h5>
+                <h5 id='ar' class="hidden text-2xl">{{category.nameAr}}</h5>
+              </a>
+            {% endfor %}
+            </div>
+          </div>
+      </section>
+    </div>
+  </div>
+</nav>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">

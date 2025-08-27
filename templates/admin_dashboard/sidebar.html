@@ -1,0 +1,52 @@
+{% load static %}
+<aside id="sidebar" class="fixed md:sticky md:top-0 w-64 bg-dark text-white p-5 h-screen transform -translate-x-full md:translate-x-0 md:transform-none transition-transform duration-300 z-40">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-2xl font-bold">Admin</h1>
+      <button id="closeSidebar" class="md:hidden bg-customBlue text-white p-2 rounded-full shadow-lg hover:bg-red-600 transition mr-2">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+    </div>
+  
+    <nav class="space-y-4">
+      <a href="#" class="block hover:text-primary">Dashboard</a>
+      <a href="{% url 'PageAddProduct' %}" class="block hover:text-primary">Add products</a>
+      <a href="{% url 'PageAddCategory' %}" class="block hover:text-primary">Add Category</a>
+      <a href="{% url 'UpdateProduct' %}" class="block hover:text-primary">Update product</a>
+      <a href="{% url 'UpdateCategory' %}" class="block hover:text-primary">Update Category</a>
+      <a href="#" class="block hover:text-primary">Orders</a>
+      <a href="#" class="block hover:text-primary">Users</a>
+      <a href="#" class="block hover:text-primary">Sales</a>
+      <a href="#" class="block hover:text-primary">Settings</a>
+    </nav>
+  </aside>
+
+    <!-- Top Card (Dashboard box) already in sidebar.html -->
+    <main class="flex-1 p-6 overflow-auto mt-1">
+      <div class="hidden sm:flex bg-white rounded-xl shadow p-4 items-center justify-between flex-wrap gap-4 mb-6">
+        <span class="text-xl font-bold text-gray-800">Escale sport</span>
+        <img src="{% static 'images/Logo.jpeg' %}" alt="Profile"
+            class="w-10 h-10 rounded-full object-cover border-2 border-primary" />
+      </div>
+
+      
+  
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('toggleSidebar');
+        const closeBtn = document.getElementById('closeSidebar');
+    
+        toggleBtn?.addEventListener('click', () => {
+          sidebar.classList.remove('-translate-x-full');
+          toggleBtn.classList.add('hidden');
+        });
+    
+        closeBtn?.addEventListener('click', () => {
+          sidebar.classList.add('-translate-x-full');
+          toggleBtn.classList.remove('hidden');
+        });
+      });
+    </script>
+    
+
+    
